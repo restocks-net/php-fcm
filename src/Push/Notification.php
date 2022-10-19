@@ -80,7 +80,7 @@ class Notification implements Request
         }
 
         if(!empty($image)) {
-            $this->image = $image
+            $this->image = $image;
         }
         
         if (!empty($data)) {

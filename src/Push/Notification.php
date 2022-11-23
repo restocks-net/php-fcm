@@ -57,6 +57,11 @@ class Notification implements Request
     /**
      * @var string
      */
+    private $channelId;
+
+    /**
+     * @var string
+     */
     private $image;
     
     /**
@@ -64,7 +69,7 @@ class Notification implements Request
      * @param string $body
      * @param string $recipient
      */
-    public function __construct(string $title = '', string $body = '', string $recipient = '', string $sound = '', string $icon = '', string $color = '', int $badge = 0, string $tag = '', string $subtitle = '', array $data = [], string $click_action = '', string $image = '')
+    public function __construct(string $title = '', string $body = '', string $recipient = '', string $sound = '', string $icon = '', string $color = '', int $badge = 0, string $tag = '', string $subtitle = '', array $data = [], string $click_action = '', string $image = '', string $channelId = '')
     {
         $this->title = $title;
         $this->body = $body;
@@ -85,7 +90,11 @@ class Notification implements Request
         
         if (!empty($data)) {
             $this->data = $data;
-        } 
+        }
+
+        if(!empty($channelId)) {
+            $this->channelId = $channelId;
+        }
         
         if (!empty($recipient)) {
             $this->addRecipient($recipient);
@@ -211,6 +220,17 @@ class Notification implements Request
     }
 
     /**
+     * @param string $image
+     *
+     * @return $this
+     */
+    public function setChannelId(string $channelId): self {
+        $this->channelId = $channelId;
+
+        return $this;
+    }
+
+    /**
      * @inheritdoc
      */
     public function getBody(): array
@@ -271,6 +291,11 @@ class Notification implements Request
         if (!empty($this->data)) {
             $request['data'] = $this->data;
         }
+
+        if(!empty($this->channelId)) {
+            $request['notification']['android_channel_id'] = $this->channelId;
+        }
+
         return $request; 
     }
 }
